@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
 import { AddBtn, Form } from './ContactFrom.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser } from 'redux/users/userSlice';
+import { getUsers } from 'redux/users/userSelectors';
 
-export const ContactForm = ({ add, contacts }) => {
+export const ContactForm = () => {
   const [user, setUser] = useState({ name: '', number: '' });
+  const contactUser = useSelector(getUsers);
+  const dispatch = useDispatch();
 
   const handleInputNameChange = e => {
     setUser({ ...user, name: e.currentTarget.value });
@@ -24,15 +28,14 @@ export const ContactForm = ({ add, contacts }) => {
       number: user.number,
     };
 
-    if (contacts.find(item => item.name === user.name)) {
+    if (contactUser.find(item => item.name === user.name)) {
       alert(`${user.name} is already in contacts.`);
       return;
-    } else if (contacts.find(item => item.number === user.number)) {
+    } else if (contactUser.find(item => item.number === user.number)) {
       alert(`${user.number} is already in contacts.`);
       return;
     }
-
-    add(contact);
+    dispatch(addUser(contact));
     resetForm();
   };
 
@@ -72,9 +75,4 @@ export const ContactForm = ({ add, contacts }) => {
       </Form>
     </>
   );
-};
-
-ContactForm.propTypes = {
-  add: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
