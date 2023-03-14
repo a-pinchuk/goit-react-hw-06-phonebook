@@ -16,23 +16,24 @@ import { filterReducer } from './filter/filterSlice';
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['filter'],
 };
 
-const persistFilterConfig = {
-  key: 'filter',
-  storage,
-};
+// const persistFilterConfig = {
+//   key: 'filter',
+//   storage,
+// };
 
 const persistedReducer = persistReducer(persistConfig, userReducer);
-const persistedFilterReducer = persistReducer(
-  persistFilterConfig,
-  filterReducer
-);
+// const persistedFilterReducer = persistReducer(
+//   persistFilterConfig,
+//   filterReducer
+// );
 
 export const store = configureStore({
   reducer: {
     users: persistedReducer,
-    filter: persistedFilterReducer,
+    filter: filterReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
